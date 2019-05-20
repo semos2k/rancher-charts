@@ -32,6 +32,9 @@ elasticsearch:
     service:
       name: elasticsearch
       type: NodePort
+    
+    env:
+      opendistro_security.ssl.http.enabled: "false"
 
     ## Enable persistence using Persistent Volume Claims
     ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/

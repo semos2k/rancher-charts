@@ -12,3 +12,4 @@ data:
   SERVER_PORT: "5601"
   LOGGING_VERBOSE: "true"
   SERVER_DEFAULTROUTE: "/app/kibana"
+  opendistro_security.ssl.http.enabled: "false"
