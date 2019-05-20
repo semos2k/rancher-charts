@@ -93,10 +93,14 @@ spec:
         resources:
 {{ toYaml .Values.master.resources | indent 12 }}
         readinessProbe:
-          httpGet:
-            path: /_cluster/health?local=true
-            port: 9200
+          tcpSocket:
+            port: 8080
           initialDelaySeconds: 5
+          periodSeconds: 10
+        #  httpGet:
+        #    path: /_cluster/health?local=true
+        #    port: 9200
+        #  initialDelaySeconds: 5
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         ports:
