@@ -94,7 +94,7 @@ spec:
 {{ toYaml .Values.master.resources | indent 12 }}
         readinessProbe:
           tcpSocket:
-            port: 8080
+            port: 9200
           initialDelaySeconds: 5
           periodSeconds: 10
         #  httpGet:
