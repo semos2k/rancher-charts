@@ -6,8 +6,8 @@ rbac:
 securityContextEnable: true
 
 image:
-  repository: "docker.elastic.co/elasticsearch/elasticsearch-oss"
-  tag: "6.4.2"
+  repository: "amazon/opendistro-for-elasticsearch"
+  tag: "0.9.0"
   pullPolicy: "IfNotPresent"
 
 terminationGracePeriodSeconds: 30  # Duration in seconds a elasticsearch pod needs to terminate gracefully.
