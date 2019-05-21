@@ -63,7 +63,7 @@ questions:
   - "ClusterIP"
   - "NodePort"
 - variable: elasticsearch.master.replicas
-  default: 3
+  default: 1
   description: "Replicas of elasticsearch"
   type: int
   label: Replicas of elasticsearch
