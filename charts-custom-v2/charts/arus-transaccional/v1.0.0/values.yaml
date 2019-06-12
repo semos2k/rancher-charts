@@ -2,12 +2,12 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-namespace: appsarus-pre
+namespace: appsarus
 image:
-  tag: prepdn
+  tag: lab
 node:
   tag: transaccional
-  env: laboratorio
+  env: lab
 
 replicaCount: 1
 
