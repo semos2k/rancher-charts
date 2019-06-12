@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: transaccional-deployment
+  name: {{ .Chart.Name }}
 #  namespace: {{ .Values.namespace }}
   labels:
     app: transaccional
@@ -96,7 +96,7 @@ spec:
               - key: env
                 operator: In
                 values:
-                - {{ .Values.node.env }}        
+                - {{ .Values.node.env }}
         podAntiAffinity:
             requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:

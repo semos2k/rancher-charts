@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+#  namespace: appsarus
+  labels:
+    app: orquestador
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: orquestador
+  template:
+    metadata:
+      labels:
+        app: orquestador
+    spec:
+      volumes:
+      - name: nfs-sa-in
+        persistentVolumeClaim:
+          claimName: nfs-sa-in-claim
+      - name: nfs-sa-out
+        persistentVolumeClaim:
+          claimName: nfs-sa-out-claim
+      - name: nfs-procesos
+        persistentVolumeClaim:
+          claimName: nfs-procesos-claim
+      - name: local-logs
+        persistentVolumeClaim:
+          claimName: local-host-logs-claim
+      containers:
+      - name: orquestador
+        image: harbor.da.arus.com.co/arus/orquestador:{{ .Values.image.tag }}
+        imagePullPolicy: Always
+        env:
+        - name: JAVA_OPTS
+          value: > 
+            -Xms2048m -Xmx2048m -XX:NewSize=512m -XX:MaxNewSize=512m -XX:PermSize=256m 
+            -XX:MaxPermSize=256m -DnamefileLog=/mnt/logs/broker/broker.log -DmaxLogFileSize=512MB 
+            -DmaxLogBackupSize=5 -Dorg.jboss.resolver.warning=true 
+            -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 
+            -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled 
+            -XX:+CMSParallelRemarkEnabled -Dfile.encoding=ISO-8859-1 -Duser.region=CO 
+            -Duser.language=es -Duser.country=CO -Duser.timezone=America/Bogota 
+            -Doc4j.userThreads=true -Dcom.sun.management.jmxremote=true 
+            -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false 
+            -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=9999 
+            -Dcom.sun.management.jmxremote.rmi.port=9998 -XX:+HeapDumpOnOutOfMemoryError 
+            -XX:HeapDumpPath=/mnt/logs/broker
+        envFrom:
+        - configMapRef:
+            name: general-config
+        - secretRef:  
+            name: orquestador-secret 
+        ports:
+        - containerPort: 8180
+        resources:
+          limits:
+            cpu: "4"
+            memory: 5632Mi
+          requests:
+            cpu: "1"
+            memory: 5Gi
+        volumeMounts:
+        - mountPath: /sa_in
+          name: nfs-sa-in
+        - mountPath: /procesos
+          name: nfs-procesos
+        - mountPath: /sa_out
+          name: nfs-sa-out
+        - mountPath: /mnt/logs
+          name: local-logs
+        livenessProbe:
+          exec:
+            command:
+            - pgrep
+            - java
+          initialDelaySeconds: 5
+          periodSeconds: 5         
+      imagePullSecrets:
+        - name: regcred    
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: group
+                operator: In
+                values:
+                - {{ .Values.node.tag }}
+              - key: env
+                operator: In
+                values:
+                - {{ .Values.node.env }}
+        podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - {{ .Values.node.tag }}
+              topologyKey: "kubernetes.io/hostname"
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 0              
