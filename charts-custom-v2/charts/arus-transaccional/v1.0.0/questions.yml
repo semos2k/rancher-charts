@@ -1,0 +1,33 @@
+categories:
+- arus
+questions:
+- variable: image.tag
+  default: "pdn"
+  description: "Tag de la imagen a utilizar en el ambiente"
+  label: Tag de imagen
+  type: string
+  required: true
+- variable: node.tag
+  default: "pdn"
+  description: "Tag de los nodos a utilizar para instalar el componente"
+  type: enum
+  label: Tag Nodos
+  required: true
+  options:
+  - "dev" 
+  - "lab" 
+  - "pre" 
+  - "pdn"
+  - "pos"
+- variable: node.env
+  default: "pdn"
+  description: "Tag de los nodos a utilizar para instalar el componente"
+  type: enum
+  label: Tag Nodos
+  required: true
+  options:
+  - "dev" 
+  - "lab" 
+  - "pre" 
+  - "pdn"
+  - "pos"
