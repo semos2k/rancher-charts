@@ -2,9 +2,15 @@ categories:
 - arus
 questions:
 - variable: domain
-  default: "www.suaporte.com.co"
+  default: "suaporte.com.co"
   description: "Dominio de la aplicación"
   label: Dominio
+  type: string
+  required: true
+- variable: host
+  default: "www"
+  description: "Host principal para la app"
+  label: host 
   type: string
   required: true
 - variable: image.tag
