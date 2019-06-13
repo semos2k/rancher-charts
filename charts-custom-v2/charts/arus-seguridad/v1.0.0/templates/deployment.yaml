@@ -4,16 +4,16 @@ metadata:
   name: {{ .Chart.Name }}
 #  namespace: {{ .Values.namespace }}
   labels:
-    app: {{ .Chart.Name }}
+    app: transaccional
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ .Chart.Name }}
+      app: transaccional
   template:
     metadata:
       labels:
-        app: {{ .Chart.Name }}
+        app: transaccional
     spec:
       volumes:
       - name: nfs-sa-in
@@ -32,7 +32,7 @@ spec:
         persistentVolumeClaim:
           claimName: local-host-logs-claim
       containers:
-      - name : {{ .Chart.Name }}
+      - name : transaccional
         image: harbor.da.arus.com.co/arus/transaccional:{{ .Values.image.tag }}
         imagePullPolicy: Always
         env:
@@ -47,10 +47,8 @@ spec:
             -DcerrarTransacciones="1" -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.local.only=false 
             -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false 
             -Dcom.sun.management.jmxremote.port=9999 -Dcom.sun.management.jmxremote.rmi.port=9998 -XX:+HeapDumpOnOutOfMemoryError 
-            -XX:HeapDumpPath=/mnt/logs/transaccional 
-            -Ddomain={{ .Values.domain }} 
-            -Dhome.sso=https://{{ .Values.host }}.{{ .Values.domain }}/sso/#/ 
-            -Dauth.sso=https://{{ .Values.host }}.{{ .Values.domain }}/auth
+            -XX:HeapDumpPath=/mnt/logs/transaccional -Ddomain=suaporte.com.co -Dhome.sso=https://www.suaporte.com.co/sso/#/ 
+            -Dauth.sso=https://www.suaporte.com.co/auth
         envFrom:
         - configMapRef:
             name: general-config

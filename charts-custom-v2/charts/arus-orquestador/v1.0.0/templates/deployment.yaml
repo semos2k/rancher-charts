@@ -4,16 +4,16 @@ metadata:
   name: {{ .Chart.Name }}
 #  namespace: appsarus
   labels:
-    app: orquestador
+    app: {{ .Chart.Name }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: orquestador
+      app: {{ .Chart.Name }}
   template:
     metadata:
       labels:
-        app: orquestador
+        app: {{ .Chart.Name }}
     spec:
       volumes:
       - name: nfs-sa-in
@@ -29,7 +29,7 @@ spec:
         persistentVolumeClaim:
           claimName: local-host-logs-claim
       containers:
-      - name: orquestador
+      - name: {{ .Chart.Name }}
         image: harbor.da.arus.com.co/arus/orquestador:{{ .Values.image.tag }}
         imagePullPolicy: Always
         env:

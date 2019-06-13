@@ -3,6 +3,7 @@
 # Declare variables to be passed into your templates.
 
 #namespace: appsarus
+domain: www.suaporte.com.co
 image:
   tag: pdn
 node:

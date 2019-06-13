@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Chart.Name }}-backend
+  name: {{ .Chart.Name }}-backend
+#  namespace: appsarus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}-backend
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}-backend
+    spec:
+      containers:
+      - name : {{ .Chart.Name }}-backend
+        image: harbor.da.arus.com.co/arus/sso-security-backend:1.0-qa
+        imagePullPolicy: "Always"
+        envFrom:
+        - configMapRef:
+            name: sso-configmap
+        - secretRef:  
+            name: sso-security-secret
+        ports:
+        - containerPort: 8090
+          protocol: TCP
+      imagePullSecrets:
+        - name: regcred
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: group
+                operator: In
+                values:
+                - {{ .Values.node.tag }}
+        podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - {{ .Chart.Name }}-backend
+              topologyKey: "kubernetes.io/hostname" 
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 0

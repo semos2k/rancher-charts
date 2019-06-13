@@ -3,11 +3,13 @@
 # Declare variables to be passed into your templates.
 
 #namespace: appsarus
+host: www
+domain: suaporte.com.co
 image:
-  tag: lab
+  tag: pdn
 node:
   tag: transaccional
-  env: lab
+  env: pdn
 
 replicaCount: 1
 
