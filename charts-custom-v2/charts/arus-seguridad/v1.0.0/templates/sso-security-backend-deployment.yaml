@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name : {{ .Chart.Name }}-backend
-        image: harbor.da.arus.com.co/arus/sso-security-backend:1.0-qa
+        image: harbor.da.arus.com.co/arus/sso-security-backend:{{ .Values.image.tag }}
         imagePullPolicy: "Always"
         envFrom:
         - configMapRef:

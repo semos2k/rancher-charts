@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name : {{ .Chart.Name }}-frontend
-        image: harbor.da.arus.com.co/arus/sso-security-frontend:certificacion
+        image: harbor.da.arus.com.co/arus/sso-security-frontend:{{ .Values.image.tag }}
         imagePullPolicy: "Always"
         ports:
         - containerPort: 80
